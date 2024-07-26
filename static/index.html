@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artificial Intelligence - Text Summarization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f1f1f1;
+        }
+        .loading {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #0073e6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Artificial Intelligence - Text Summarization</h1>
+    <textarea id="text-input" rows="10" placeholder="Masukkan teks di sini..."></textarea>
+    <button onclick="summarizeText()">Summarize</button>
+    <div id="summary-output" class="result"></div>
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <script>
+        async function summarizeText() {
+            const text = document.getElementById('text-input').value;
+            const loading = document.getElementById('loading');
+            const summaryOutput = document.getElementById('summary-output');
+
+            loading.style.display = 'block';
+            summaryOutput.innerText = '';
+
+            const response = await fetch('/summarize', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text })
+            });
+
+            const result = await response.json();
+            summaryOutput.innerText = result.summary;
+
+            loading.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
